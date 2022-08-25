@@ -26,6 +26,12 @@ import {
         return () => setLoading(false);
     }, []);
 
+    function resetTextInputs() {
+        setUsername("");
+        setPassword("");
+        setConfirmPassword("");
+    }
+
     async function signUp() {
         setLoading(true);
         if (password != confirmPassword) {
@@ -39,6 +45,7 @@ import {
                 if (response.data.Error) {
                     setErrorText(response.data.Error);
                 } else {
+                    resetTextInputs();
                     login();
                 }
             } catch (error) {
@@ -57,6 +64,7 @@ import {
           password,
         });
         await AsyncStorage.setItem("token", response.data.access_token);
+        resetTextInputs();
         navigation.navigate(PROFILE_SCREEN);
       } catch (error) {
         console.log(error.response);
