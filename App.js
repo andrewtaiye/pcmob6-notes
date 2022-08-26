@@ -4,8 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, StatusBar, StyleSheet, View } from "react-native";
 import AuthScreen from "./screens/AuthScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import { AUTH_SCREEN, PROFILE_SCREEN } from "./constants";
+import HomeStack from "./components/HomeStack";
+import { AUTH_SCREEN, HOME_STACK } from "./constants";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -32,14 +32,14 @@ export default function App() {
     <NavigationContainer>
       <StatusBar />
       <Stack.Navigator
-        initialRouteName={loggedIn ? PROFILE_SCREEN : AUTH_SCREEN}
+        initialRouteName={loggedIn ? HOME_STACK : AUTH_SCREEN}
         screenOptions={{
           animationEnabled: false,
           headerShown: false,
         }}
       >
         <Stack.Screen component={AuthScreen} name={AUTH_SCREEN} />
-        <Stack.Screen component={ProfileScreen} name={PROFILE_SCREEN} />
+        <Stack.Screen component={HomeStack} name={HOME_STACK} />
       </Stack.Navigator>
     </NavigationContainer>
   );
