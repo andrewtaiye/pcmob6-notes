@@ -6,16 +6,10 @@ import {
     View,
   } from "react-native";
   import React from "react";
-  
-  const posts = [
-    {
-      id: 1,
-      title: "Add NotesScreenHome.js file",
-      content: "Make sure you don't have any errors when copying this code",
-    },
-  ];
+  import { useSelector } from "react-redux";
   
   export default function NotesScreenHome() {
+    const posts = useSelector((state) => state.notes);
     function renderItem({ item }) {
       return (
         <TouchableOpacity style={styles.noteCard} onPress={() => {}}>
