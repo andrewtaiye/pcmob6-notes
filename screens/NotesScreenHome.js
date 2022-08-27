@@ -27,7 +27,7 @@ import {
 
     function renderItem({ item }) {
       return (
-        <TouchableOpacity style={styles.noteCard} onPress={() => {}}>
+        <TouchableOpacity style={styles.noteCard} onPress={() => {navigation.navigate(NOTES_SCREEN.Details, item)}}>
           <Text style={styles.noteCardTitle}>{item.title}</Text>
           <Text style={styles.noteCardBodyText}>
             {item.content.substring(0, 120)}

@@ -10,11 +10,34 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { nanoid } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { addNewPost } from "../features/notesSlice";
 
 export default function NotesScreenAdd() {
   const navigation = useNavigation();
   const [noteTitle, setNoteTitle] = useState("");
   const [noteBody, setNoteBody] = useState("");
+  const dispatch = useDispatch();
+
+  const canSave = [noteTitle, noteBody].every(Boolean);
+
+  async function savePost() {
+    if (canSave) {
+        try {
+            const post = {
+                id: nanoid(),
+                title: noteTitle,
+                content: noteBody,
+            };
+            await dispatch(addNewPost(post));
+        } catch (error) {
+            console.error("Failed to save the post. Error: ", error);
+        } finally {
+            navigation.goBack();
+        }
+    }
+  }
 
   return (
      <KeyboardAvoidingView
@@ -40,7 +63,7 @@ export default function NotesScreenAdd() {
         multiline={true}
       />
       <View style={{ flex: 1 }} />
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
+      <TouchableOpacity style={styles.button} onPress={async () => await savePost()}>
         <Text style={styles.buttonText}>Add Note</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>

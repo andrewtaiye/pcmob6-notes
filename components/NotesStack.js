@@ -3,6 +3,7 @@ import React from "react";
 import { NOTES_SCREEN } from "../constants";
 import NotesScreenAdd from "../screens/NotesScreenAdd";
 import NotesScreenHome from "../screens/NotesScreenHome";
+import NotesScreenDetails from "../screens/NotesScreenDetails";
 
 const NotesStackNav = createStackNavigator();
 
@@ -18,6 +19,11 @@ export default function NotesStack() {
         name={NOTES_SCREEN.Add}
         component={NotesScreenAdd}
         options={{ headerShown: false }}
+      />
+      <NotesStackNav.Screen
+        name={NOTES_SCREEN.Details}
+        component={NotesScreenDetails}
+        options={{headerShown: false}}
       />
     </NotesStackNav.Navigator>
   );
