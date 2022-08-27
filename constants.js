@@ -17,3 +17,10 @@ export const NOTES_SCREEN = {
     Details: "NotesScreenDetails",
     Add: "NotesScreenAdd",
 };
+
+export const API_STATUS = {
+    idle: "idle",
+    pending: "pending",
+    fulfilled: "fulfilled",
+    rejected: "rejected",
+}
