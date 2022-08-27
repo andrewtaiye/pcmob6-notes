@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AUTH_SCREEN, API, API_WHOAMI } from "../constants";
+import { AUTH_SCREEN, API, API_WHOAMI, CAMERA_SCREEN } from "../constants";
 import axios from "axios";
 
 export default function ProfileScreen() {
@@ -35,6 +35,12 @@ export default function ProfileScreen() {
       <Text style={{ fontSize: 20, fontWeight: "700", marginBottom: 10 }}>
         your user name: {username}
       </Text>
+      <TouchableOpacity
+        style={styles.outlinedButton}
+        onPress={() => navigation.navigate(CAMERA_SCREEN)}
+      >
+        <Text style={styles.outlinedButtonText}>Upload Photo</Text>
+      </TouchableOpacity>
       <View style={{ flex: 1 }} />
       <TouchableOpacity
         style={styles.button}
