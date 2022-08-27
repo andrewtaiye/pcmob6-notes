@@ -2,6 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API, API_CREATE, API_POSTS, API_STATUS } from "../constants";
+import { collection, deleteDoc, doc, setDoc, getDocs, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const initialState = {
     posts: [],
@@ -10,34 +12,27 @@ const initialState = {
 };
 
 export const fetchPosts = createAsyncThunk("notes/fetchPosts", async () => {
-    const token = await AsyncStorage.getItem("token");
-    const response = await axios.get(API + API_POSTS, {
-        headers: { Authorization: `JWT ${token}` },
+    const querySnapshot = await getDocs(collection(db, "notes"));
+    const notes = querySnapshot.docs.map((doc) => {
+        // console.log(doc.data());
+        return { id: doc.id, ...doc.data() };
     });
-    return response.data;
+    // console.log(notes);
+    return notes;
 });
 
 export const addNewPost = createAsyncThunk("notes/addNewPost", async (newPost) => {
-    const token = await AsyncStorage.getItem("token");
-    const response = await axios.post(API + API_CREATE, newPost, {
-        headers: { Authorization: `JWT ${token}` },
-    });
-    return response.data;
+    await setDoc(doc(db, "notes", newPost.id), newPost);
+    return newPost;
 });
 
 export const updatePostThunk = createAsyncThunk("posts/updatePost", async (updatedPost) => {
-    const token = await AsyncStorage.getItem("token");
-    const response = await axios.put(API + API_POSTS + "/" + updatedPost.id, updatedPost, {
-        headers: { Authorization: `JWT ${token}` },
-    });
-    return response.data;
+    await updateDoc(doc(db, "notes", updatedPost.id), updatedPost);
+    return updatedPost;
 })
 
 export const deletePostThunk = createAsyncThunk("posts/deletePost", async (id) => {
-    const token = await AsyncStorage.getItem("token");
-    await axios.delete(API + API_POSTS + "/" + id, {
-        headers: { Authorization: `JWT ${token}` },
-    });
+    await deleteDoc(doc(db, "notes", id));
     return id;
 })
 
@@ -62,12 +57,11 @@ const notesSlice = createSlice({
             state.posts.push(action.payload);
         })
         .addCase(updatePostThunk.fulfilled, (state, action) => {
-            const {id, title, content} = action.payload;
-            const existingPost = state.posts.find((post) => post.id === id);
-            if (existingPost) {
-                existingPost.title = title;
-                existingPost.content = content;
-            }
+            const {id } = action.payload;
+            const posts = state.posts;
+            const post = state.posts.find((post) => post.id === id);
+            const postIndex = posts.indexOf(post);
+            if (~postIndex) posts[postIndex] = action.payload;
         })
         .addCase(deletePostThunk.fulfilled, (state, action) => {
             const id = action.payload;
