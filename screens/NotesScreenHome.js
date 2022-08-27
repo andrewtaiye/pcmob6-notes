@@ -22,7 +22,7 @@ import {
     useEffect(() => {
       if(notesStatus === API_STATUS.idle) {
         dispatch(fetchPosts())
-      };
+      }
     }, [notesStatus, dispatch])
 
     function renderItem({ item }) {
